@@ -19,26 +19,39 @@ var enemyInfo = [
     }
 ]
 
+var fightOrSkip = function() {
+    var promptFight = window.prompt('Would you like to FIGHT or SKIP this battle? Enter "FIGHT" or "SKIP" to choose.');
+
+    promptFight = promptFight.toLowerCase();
+
+    if (promptFight === "" || promptFight === null) {
+        window.alert("You need to provide a valid answer! Please try again.");
+        fightOrSkip();
+    }
+
+    // if player picks "skip" confirm and then stop the loop
+    if (promptFight === "skip") {
+        // Confirm player wants to skip
+        var confirmSkip = window.confirm("Are you sure you'd like to quit?");
+
+        // if true leave fight
+        if (confirmSkip) {
+            window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
+            // Subtract money from player for skipping
+            playerInfo.money = Math.max(0, playerInfo.money - 2);
+            return true;
+        }
+    }
+    return false;
+}
+
 // Takes parameter to start robot fight
 var fight = function(enemy) {
     while(playerInfo.health >0 && enemy.health > 0) {
-        var promptFight = window.prompt("Would you like to FIGHT or SKIP this battle? Enter 'FIGHT' or 'SKIP' to choose." );
 
-        // if player picks "skip" confirm and then stop the loop
-        if (promptFight === "skip" || promptFight === "SKIP") {
-            // Confirm player wants to skip
-            var confirmSkip = window.confirm("Are you sure you'd like to quit?");
-
-            // if true leave fight
-            if (confirmSkip) {
-                window.alert(playerInfo.name + " has decided to skip this fight. Goodbye!");
-                // Subtract money from player for skipping
-                playerInfo.money = Math.max(0, playerInfo.money - 2);
-                console.log("playerInfo.money ", playerInfo.money);
-                break;
-            }
+        if (fightOrSkip()) {
+            break;
         }
-
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
         // Subtract the values of `damage` from the value of `enemy.health` and use that result to update the value in the 'enemy.health' variable
