@@ -21,14 +21,16 @@ var fight = function(enemyName) {
             if (confirmSkip) {
                 window.alert(playerName + " has decided to skip this fight. Goodbye!");
                 // Subtract money from player for skipping
-                playerMoney = playerMoney - 2;
+                playerMoney = Math.max(0, playerMoney - 2);
                 console.log("playerMoney ", playerMoney);
                 break;
             }
         }
 
-        // Subtract the values of `playerAttack` from the value of `enemyHealth` and use that result to update the value in the 'enemyHealth' variable
-        enemyHealth = enemyHealth - playerAttack;
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+
+        // Subtract the values of `damage` from the value of `enemyHealth` and use that result to update the value in the 'enemyHealth' variable
+        enemyHealth = Math.max(0, enemyHealth - damage);
 
         // Log a resulting message to the console so we know that it worked.
         console.log(playerName + " attacked " + enemyName + ". " + enemyName + " now has " + enemyHealth + " health remaining.");
@@ -42,8 +44,10 @@ var fight = function(enemyName) {
             window.alert(enemyName + " still has " + enemyHealth + " health left.")
         }
 
-        // Subtract the value of `enemyAttack` from the value `playerHealth` and use that result to update the value in the 'playerHealth' variable.
-        playerHealth = playerHealth - enemyAttack;
+        var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
+        // Subtract the value of `damage` from the value `playerHealth` and use that result to update the value in the 'playerHealth' variable.
+        playerHealth = Math.max(0, playerHealth - damage);
 
         // Log resulting message to the console so we know that it worked.
         console.log(enemyName + " attacked " + playerName + ". " + playerName + " now has " + playerHealth + " health remaining." );
@@ -72,7 +76,7 @@ var startGame = function() {
 
             var pickedEnemyName = enemyNames[i];
 
-            enemyHealth = 50;
+            enemyHealth = randomNumber(40, 60);
 
             fight(pickedEnemyName);
 
@@ -122,7 +126,7 @@ var shop = function() {
                 window.alert("Refilling player's health by 20 for 7 dollars.");
 
                 playerHealth = playerHealth + 20;
-                playerMoney = playerMoney - 7;
+                playerMoney = Math.max(0, playerMoney - 7);
             } else {
                 window.alert("You don't have enough money!");
             }
@@ -134,7 +138,7 @@ var shop = function() {
                 window.alert("Upgrading player's attack by 6 for 7 dollars.");
 
                 playerAttack = playerAttack + 6;
-                playerMoney = playerMoney - 7;
+                playerMoney = Math.max(0, playerMoney - 7);
             } else {
                 window.alert("You don't have enough money!");
             }
@@ -154,6 +158,11 @@ var shop = function() {
             break;
     }
 };
+
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) + min);
+    return value;
+}
 
 // Start the game on page load
 startGame();
