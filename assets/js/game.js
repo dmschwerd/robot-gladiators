@@ -47,11 +47,21 @@ var fightOrSkip = function() {
 
 // Takes parameter to start robot fight
 var fight = function(enemy) {
-    while(playerInfo.health >0 && enemy.health > 0) {
+    // Determine who goes first
+    var isPlayerTurn = true;
 
-        if (fightOrSkip()) {
+    if (Math.random() > 0.5) {
+        isPlayerTurn = false;
+    }
+
+    while(playerInfo.health > 0 && enemy.health > 0) {
+
+        if (isPlayerTurn) {
+            if (fightOrSkip()) {
             break;
+            }
         }
+
         var damage = randomNumber(playerInfo.attack - 3, playerInfo.attack);
 
         // Subtract the values of `damage` from the value of `enemy.health` and use that result to update the value in the 'enemy.health' variable
@@ -84,6 +94,7 @@ var fight = function(enemy) {
         } else {
             window.alert(playerInfo.name + " still has " + playerInfo.health + " health left.")
         }
+        isPlayerTurn = !isPlayerTurn;
     }
 }
 
@@ -137,24 +148,23 @@ var endGame = function() {
 };
 
 var shop = function() {
-    debugger;
     // Prompt player for shop options
     var shopOptionPrompt = window.prompt(
         "Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one 1 for REFILL, 2 for UPGRADE, or 3 for LEAVE."
     );
 
-    parseInt(shopOptionPrompt);
+    shopOptionPrompt = parseInt(shopOptionPrompt);
 
     switch (shopOptionPrompt) {
-        case "1":
+        case 1:
             playerInfo.refillHealth();
             break;
 
-        case "2":
+        case 2:
             playerInfo.upgradeAttack();
             break;
 
-        case "3":
+        case 3:
             window.alert("Leaving the store.");
             break;
         
